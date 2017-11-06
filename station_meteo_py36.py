@@ -38,7 +38,7 @@ sys.path.append("/home/pi/Documents/projets_jo/Adafruit_Python_CharLCD")
 sys.path.append("/home/pi/Documents/projets_jo/Adafruit_Python_GPIO")
 sys.path.append("/home/pi/Documents/projets_jo/Adafruit_Python_DHT")
 
-import urllib2
+##+
 import json
 import requests
 import time
@@ -59,6 +59,7 @@ lcdDisplay = LCD.Adafruit_CharLCDPlate()
 # création des listes pour les différents lieux pour lesquel on veut pouvoir afficher les prévisions météo
 placeList = [
    ["CH", "Sion"],
+   ["NZ", "Christchurch"],
    ["IT", "Todi"],
    ["ES", "la Garriga"],
    ["GB", "London"],
