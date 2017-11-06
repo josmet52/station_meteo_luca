@@ -6,8 +6,8 @@
 """
 Programme : Station météo
 Auteur : jmetra
-Version : 06a
-Date : 10.09.2017
+Version : 06b
+Date : 12.09.2017
 
 Ce programme affiche sur un display 2x16 caractères les prévisions météorologiques.
 
@@ -42,6 +42,7 @@ import urllib2
 import json
 import requests
 import time
+from datetime import datetime
 import Adafruit_CharLCD as LCD
 import unicodedata
 
@@ -91,6 +92,9 @@ selectedLanguage = 0  # par défaut en francais
 
 #buttonList 
 buttonList = [LCD.SELECT, LCD.RIGHT, LCD.DOWN, LCD.UP, LCD.LEFT]
+
+# intervalle entre deux interrogations du site meteo en heures
+meteoUpdateInterval = 2
 
 #---------------------------------------------------------------------------------------------------------------------------------
 # fonctions nécessaires au fonctionnement du programme
@@ -148,9 +152,25 @@ lForecast = get_forecast(selectedPlace)
 lcdDisplay.message(lForecast[selectedDay])
 
 # impression utile pendant la phase de mise au point du programme
+<<<<<<< HEAD
 print (placeList[selectedPlace][placesCityIndex] + " / " + languageList[selectedLanguage])
 print (lForecast[selectedDay])
 print ("------------------")
+=======
+print placeList[selectedPlace][placesCityIndex] + " / " + languageList[selectedLanguage]
+print lForecast[selectedDay]
+
+n = datetime.now()
+t = n.timetuple()
+y_x, m_x, d_x, h_x, min_x, sec_x, wd_x, yd_x, i_x = t
+oldMeteoUpdateHour = h_x
+lcdDisplay.clear()
+lForecast = get_forecast(selectedPlace)
+lcdDisplay.message(lForecast[selectedDay])
+print "new forecast published at "+ str(h_x) + "." + str(min_x) + " the " + str(d_x) + "." + str(m_x) + "." + str(y_x)
+print "---------------------------------------------"
+
+>>>>>>> refs/remotes/origin/master
 
 # boucle sans fin <CTRL-C> pour quitter le programme
 while True:
@@ -214,6 +234,24 @@ while True:
           print ("------------------")
           
     time.sleep(0.2)
+    n = datetime.now()
+    t = n.timetuple()
+    y_x, m_x, d_x, h_x, min_x, sec_x, wd_x, yd_x, i_x = t
+    currentMeteoUpdateHour = h_x
+    if currentMeteoUpdateHour < oldMeteoUpdateHour : oldMeteoUpdateHour -= 24
+    if oldMeteoUpdateHour + meteoUpdateInterval <= currentMeteoUpdateHour:
+       oldMeteoUpdateHour = currentMeteoUpdateHour
+       lcdDisplay.clear()
+       lForecast = get_forecast(selectedPlace)
+       lcdDisplay.message(lForecast[selectedDay])
+
+       # impression utile pendant la mise au point du programme 
+       print placeList[selectedPlace][placesCityIndex] + " / " + languageList[selectedLanguage]
+       print lForecast[selectedDay]
+       print "new forecast published at "+ str(h_x) + "." + str(min_x) + "  the " + str(d_x) + "." + str(m_x) + "." + str(y_x)
+       print "---------------------------------------------"
+       
+
 
 # Fin du programme
 #---------------------------------------------------------------------------------------------------------------------------------
